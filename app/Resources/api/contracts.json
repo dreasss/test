@@ -1,0 +1,160 @@
+{
+  "auth": {
+    "POST /auth/sso/callback": {
+      "roles": ["admin"],
+      "body": {
+        "code": "string",
+        "state": "string"
+      },
+      "response": {"status": "ok"}
+    }
+  },
+  "tickets": {
+    "GET /tickets": {
+      "roles": ["admin", "agent", "user"],
+      "response": "Ticket[]"
+    },
+    "POST /tickets": {
+      "roles": ["admin", "user"],
+      "body": "Ticket",
+      "response": {"id": "number"}
+    },
+    "PATCH /tickets/{id}": {
+      "roles": ["admin", "agent"],
+      "body": "Ticket",
+      "response": {"status": "ok"}
+    },
+    "GET /tickets/{id}/messages": {
+      "roles": ["admin", "agent", "user"],
+      "response": "Message[]"
+    },
+    "POST /tickets/{id}/messages": {
+      "roles": ["admin", "agent", "user"],
+      "body": "Message",
+      "response": {"id": "number"}
+    }
+  },
+  "knowledge": {
+    "GET /knowledge": {
+      "roles": ["admin", "agent", "user"],
+      "response": "KnowledgeArticle[]"
+    },
+    "POST /knowledge": {
+      "roles": ["admin", "agent"],
+      "body": "KnowledgeArticle",
+      "response": {"id": "number"}
+    },
+    "PATCH /knowledge/{id}": {
+      "roles": ["admin", "agent"],
+      "body": "KnowledgeArticle",
+      "response": {"status": "ok"}
+    }
+  },
+  "news": {
+    "GET /news": {
+      "roles": ["admin", "agent", "user"],
+      "response": "NewsItem[]"
+    },
+    "POST /polls/{id}/vote": {
+      "roles": ["admin", "agent", "user"],
+      "body": {"choice": "string"},
+      "response": {"status": "ok"}
+    }
+  },
+  "sync": {
+    "POST /sync/1c/export": {
+      "roles": ["admin"],
+      "body": {"entities": "array"},
+      "response": {"status": "queued"}
+    }
+  },
+  "schemas": {
+    "User": {
+      "id": "number",
+      "role": "admin|agent|user",
+      "firstName": "string",
+      "lastName": "string",
+      "email": "string",
+      "phone": "string?",
+      "department": "string",
+      "building": "string",
+      "room": "string",
+      "locale": "string",
+      "avatarUrl": "string?",
+      "ssoSubject": "string?",
+      "createdAt": "datetime",
+      "updatedAt": "datetime"
+    },
+    "Ticket": {
+      "id": "number",
+      "authorId": "number",
+      "assigneeId": "number?",
+      "title": "string",
+      "description": "string",
+      "priority": "high|medium|low",
+      "desiredAt": "datetime?",
+      "status": "new|assigned|in_progress|waiting_user|resolved|closed|reopened",
+      "building": "string",
+      "room": "string",
+      "attachments": "string[]",
+      "createdAt": "datetime",
+      "updatedAt": "datetime",
+      "lastAgentReplyAt": "datetime?",
+      "lastUserReplyAt": "datetime?"
+    },
+    "Message": {
+      "id": "number",
+      "ticketId": "number",
+      "authorId": "number",
+      "body": "string",
+      "attachments": "string[]",
+      "createdAt": "datetime",
+      "isSystem": "boolean"
+    },
+    "KnowledgeArticle": {
+      "id": "number",
+      "slug": "string",
+      "titleRU": "string",
+      "bodyRU": "string",
+      "titleEN": "string",
+      "bodyEN": "string",
+      "tags": "string[]",
+      "createdBy": "number",
+      "updatedBy": "number",
+      "status": "draft|published",
+      "usefulnessUp": "number",
+      "usefulnessDown": "number"
+    },
+    "NewsItem": {
+      "id": "number",
+      "titleRU": "string",
+      "bodyRU": "string",
+      "titleEN": "string",
+      "bodyEN": "string",
+      "coverUrl": "string?",
+      "publishAt": "datetime",
+      "isPoll": "boolean",
+      "pollOptions": "string[]",
+      "pollVotes": "object"
+    },
+    "Branding": {
+      "nameRU": "string",
+      "nameEN": "string",
+      "sloganRU": "string",
+      "sloganEN": "string",
+      "logoUrl": "string",
+      "colorPrimary": "string",
+      "colorSecondary": "string"
+    },
+    "SyncQueue": {
+      "id": "number",
+      "entityType": "string",
+      "entityId": "number",
+      "action": "string",
+      "payload": "object",
+      "attemptCount": "number",
+      "lastError": "string?",
+      "status": "pending|done|failed"
+    }
+  }
+}
